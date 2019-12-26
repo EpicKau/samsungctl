@@ -23,3 +23,9 @@ class Remote:
 
     def control(self, key):
         return self.remote.control(key)
+
+    def get_installed_apps(self):
+        return self.remote.get_installed_apps()
+
+    def launch(self):
+        return self.remote.launch()

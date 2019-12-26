@@ -63,6 +63,48 @@ class RemoteWebsocket():
 
     _key_interval = 0.5
 
+    def launch(self, appId, method="DEEP_LINK"):
+        """Launch an app command."""
+        if not self.connection:
+            raise exceptions.ConnectionClosed()
+
+        payload = json.dumps({
+            "method": "ms.channel.emit",
+            "params": {
+                "event": "ed.apps.launch",
+                "to": "host",
+                "data": {
+                    "appId": "11101200001",
+                    "action_type": method
+                }
+            }
+        })
+
+        logging.info("Sending launch command: %s", appId)
+        self.connection.send(payload)
+        time.sleep(self._key_interval)
+
+    _key_interval = 0.5
+
+    def get_installed_apps(self):
+        """Get all installed apps command."""
+        if not self.connection:
+            raise exceptions.ConnectionClosed()
+
+        payload = json.dumps({
+            "method": "ms.channel.emit",
+            "params": {
+                "event": "ed.installedApp.get",
+                "to": "host"
+            }
+        })
+
+        logging.info("Sending get_installed_apps command")
+        self.connection.send(payload)
+        time.sleep(self._key_interval)
+
+    _key_interval = 0.5
+
     def _read_response(self):
         response = self.connection.recv()
         response = json.loads(response)
